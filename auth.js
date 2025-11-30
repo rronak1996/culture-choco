@@ -4,7 +4,7 @@
 // ============================================
 
 // Configuration - Google Apps Script URL
-const AUTH_API_URL = 'https://script.google.com/macros/s/AKfycbxX_jcr8xQGqKN1P-cUVzUGfYnqJw7-AWGqEkki5CO086XftIv2ccehxzbW3lwmCZ7u/exec';
+const AUTH_API_URL = 'https://script.google.com/macros/s/AKfycby9BEZcv_4eycn_Pjps2u2LxzjpKjHe4t5hS16fk0TV_oXfH35HNI6p3-1dtUauNEY/exec';
 const AUTH_API_KEY = 'culture-secure-2025';
 
 // Session storage keys
@@ -35,16 +35,15 @@ async function makeAuthRequest(action, data) {
 
         const response = await fetch(AUTH_API_URL, {
             method: 'POST',
-            mode: 'no-cors', // Required for Google Apps Script
+            redirect: 'follow',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'text/plain;charset=utf-8',
             },
             body: JSON.stringify(payload)
         });
 
-        // Note: no-cors mode doesn't allow reading response
-        // We'll use a workaround with GET requests for data retrieval
-        return { success: true };
+        const data = await response.json();
+        return data;
     } catch (error) {
         console.error('Auth request error:', error);
         return { success: false, error: error.message };
@@ -161,23 +160,8 @@ async function signup(name, email, mobile, password) {
         });
 
         if (result.success) {
-            // For no-cors mode, we simulate success
-            // In production, you'd get actual response
-            const mockUser = {
-                userId: 'USER-' + Date.now(),
-                name,
-                email,
-                mobile
-            };
-            const mockToken = btoa(email + ':' + Date.now());
-
-            saveSession(mockUser, mockToken);
-
-            return {
-                success: true,
-                message: 'Account created successfully',
-                user: mockUser
-            };
+            saveSession(result.user, result.token);
+            return result;
         }
 
         return result;
@@ -213,23 +197,8 @@ async function login(email, password) {
         });
 
         if (result.success) {
-            // For no-cors mode, we simulate success
-            // In production, you'd get actual response
-            const mockUser = {
-                userId: 'USER-' + Date.now(),
-                name: email.split('@')[0], // Extract name from email
-                email,
-                mobile: '0000000000'
-            };
-            const mockToken = btoa(email + ':' + Date.now());
-
-            saveSession(mockUser, mockToken);
-
-            return {
-                success: true,
-                message: 'Login successful',
-                user: mockUser
-            };
+            saveSession(result.user, result.token);
+            return result;
         }
 
         return result;

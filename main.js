@@ -1,7 +1,7 @@
 // Google Sheets Configuration
 // IMPORTANT: Replace this URL with your Google Apps Script web app URL
 // See GOOGLE_SHEETS_SETUP.md for instructions
-const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxX_jcr8xQGqKN1P-cUVzUGfYnqJw7-AWGqEkki5CO086XftIv2ccehxzbW3lwmCZ7u/exec';
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycby9BEZcv_4eycn_Pjps2u2LxzjpKjHe4t5hS16fk0TV_oXfH35HNI6p3-1dtUauNEY/exec';
 // Security Token (Must match the one in your Apps Script)
 const API_KEY = 'culture-secure-2025';
 
@@ -446,7 +446,7 @@ function sendToGoogleSheets(orderData) {
     fetch(GOOGLE_SHEETS_URL, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'text/plain;charset=utf-8',
         },
         body: JSON.stringify(payload)
     })
