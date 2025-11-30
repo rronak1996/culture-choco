@@ -39,7 +39,7 @@
         <div class="container">
             <div class="account-header">
                 <h1>My Account</h1>
-                <button class="btn btn-outline" onclick="window.auth.logout()">Logout</button>
+                <button class="btn btn-outline" onclick="window.auth && window.auth.logout()">Logout</button>
             </div>
 
             <!-- Profile Section -->
@@ -104,26 +104,45 @@
     <script type="module" src="auth.js"></script>
     <script type="module" src="main.js"></script>
     <script type="module">
-        // Wait for auth.js to load
+        // Wait for auth.js to load with retry mechanism
         document.addEventListener('DOMContentLoaded', async () => {
-            // Small delay to ensure window.auth is assigned
-            await new Promise(resolve => setTimeout(resolve, 100));
+            // Wait for window.auth to be available (with retry)
+            async function waitForAuth(maxRetries = 50, delay = 100) {
+                for (let i = 0; i < maxRetries; i++) {
+                    if (window.auth && typeof window.auth.getCurrentUser === 'function') {
+                        return true;
+                    }
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+                return false;
+            }
+
+            // Wait for auth module
+            const authLoaded = await waitForAuth();
+
+            if (!authLoaded) {
+                console.error('Auth module failed to load');
+                alert('Failed to load authentication. Please refresh the page.');
+                return;
+            }
 
             // Protect this page - require login
-            if (window.auth) {
-                window.auth.requireAuth();
-            }
+            window.auth.requireAuth();
 
             // Load user profile
             function loadUserProfile() {
-                if (!window.auth) return;
                 const user = window.auth.getCurrentUser();
-                if (!user) return;
 
-                document.getElementById('user-name').textContent = user.name;
-                document.getElementById('user-email').textContent = user.email;
-                document.getElementById('user-mobile').textContent = user.mobile;
-                document.getElementById('user-initial').textContent = user.name.charAt(0).toUpperCase();
+                if (!user) {
+                    console.error('No user found in session');
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                document.getElementById('user-name').textContent = user.name || 'N/A';
+                document.getElementById('user-email').textContent = user.email || 'N/A';
+                document.getElementById('user-mobile').textContent = user.mobile || 'N/A';
+                document.getElementById('user-initial').textContent = user.name ? user.name.charAt(0).toUpperCase() : 'U';
             }
 
             // Load user orders
@@ -133,10 +152,6 @@
                 const listDiv = document.getElementById('orders-list');
 
                 try {
-                    if (!window.auth) {
-                        throw new Error('Auth module not loaded');
-                    }
-
                     const result = await window.auth.getUserOrders();
 
                     loadingDiv.style.display = 'none';
@@ -181,7 +196,7 @@
 
             // Initialize
             loadUserProfile();
-            loadUserOrders();
+            await loadUserOrders();
         });
     </script>
 </body>
