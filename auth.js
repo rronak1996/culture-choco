@@ -1,15 +1,4 @@
 // ============================================
-// AUTHENTICATION MODULE
-// Handles user signup, login, logout, and session management
-// ============================================
-
-// Configuration - Update this with your Google Apps Script URL
-const AUTH_API_URL = 'YOUR_WEB_APP_URL_HERE';
-const AUTH_API_KEY = 'culture-secure-2025';
-
-// Session storage keys
-const SESSION_USER_KEY = 'culture_user';
-const SESSION_TOKEN_KEY = 'culture_token';
 
 // ============================================
 // UTILITY FUNCTIONS
