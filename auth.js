@@ -42,8 +42,8 @@ async function makeAuthRequest(action, data) {
             body: JSON.stringify(payload)
         });
 
-        const data = await response.json();
-        return data;
+        const responseData = await response.json();
+        return responseData;
     } catch (error) {
         console.error('Auth request error:', error);
         return { success: false, error: error.message };
