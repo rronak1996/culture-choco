@@ -1,8 +1,15 @@
 // ============================================
+// AUTHENTICATION MODULE
+// Handles user signup, login, logout, and session management
+// ============================================
 
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
+// Configuration - Google Apps Script URL
+const AUTH_API_URL = 'https://script.google.com/macros/s/AKfycbxX_jcr8xQGqKN1P-cUVzUGfYnqJw7-AWGqEkki5CO086XftIv2ccehxzbW3lwmCZ7u/exec';
+const AUTH_API_KEY = 'culture-secure-2025';
+
+// Session storage keys
+const SESSION_USER_KEY = 'culture_user';
+const SESSION_TOKEN_KEY = 'culture_token';
 
 /**
  * Simple client-side password hashing (SHA-256)
