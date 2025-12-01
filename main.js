@@ -305,7 +305,49 @@ paymentMethods.forEach(radio => {
     });
 });
 
+// Setup Event Listeners
+function setupEventListeners() {
+    // Cart Button - Open Cart
+    if (cartBtn) {
+        cartBtn.addEventListener('click', openCart);
+    }
 
+    // Close Cart Button
+    if (closeCart) {
+        closeCart.addEventListener('click', closeCartMenu);
+    }
+
+    // Cart Overlay - Close on click
+    if (cartOverlay) {
+        cartOverlay.addEventListener('click', closeCartMenu);
+    }
+
+    // Checkout Button
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', openCheckout);
+    }
+
+    // Close Checkout Modal Button
+    if (closeCheckout) {
+        closeCheckout.addEventListener('click', () => {
+            checkoutModal.classList.remove('active');
+        });
+    }
+
+    // Checkout Form
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', handleCheckout);
+    }
+
+    // Mobile Menu Toggle
+    if (mobileMenuBtn) {
+        const nav = document.getElementById('nav');
+        mobileMenuBtn.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+    }
+}
 function handleCheckout(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
