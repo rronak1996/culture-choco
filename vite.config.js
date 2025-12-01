@@ -1,20 +1,10 @@
-import { resolve } from 'path'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-    base: './',
-    server: {
-        open: true,
-        port: 3000
-    },
+    base: '/culture-choco/',
     build: {
-        rollupOptions: {
-            input: {
-                main: resolve(__dirname, 'index.html'),
-                login: resolve(__dirname, 'login.html'),
-                signup: resolve(__dirname, 'signup.html'),
-                account: resolve(__dirname, 'account.html')
-            }
-        }
+        outDir: 'dist',
+        assetsDir: 'assets',
+        emptyOutDir: true,
     }
 })

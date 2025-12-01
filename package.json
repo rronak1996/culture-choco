@@ -3,10 +3,13 @@
     "private": true,
     "version": "1.0.0",
     "type": "module",
+    "homepage": "https://rronak1996.github.io/culture-choco",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d dist"
     },
     "devDependencies": {
         "gh-pages": "^6.3.0",
